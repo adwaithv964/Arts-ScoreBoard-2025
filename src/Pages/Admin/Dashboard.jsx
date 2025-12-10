@@ -16,6 +16,9 @@ const Dashboard = () => {
     const [score, setScore] = useState('');
     const [category, setCategory] = useState('Arts');
 
+    // Edit Mode State
+    const [editingScoreId, setEditingScoreId] = useState(null);
+
     // Data States
     const [recentScores, setRecentScores] = useState([]);
     const [groupsData, setGroupsData] = useState([]);
@@ -57,11 +60,11 @@ const Dashboard = () => {
         return () => { unsubScore(); unsubGroups(); };
     }, []);
 
-    const handleAddScore = async (e) => {
+    const handleSaveScore = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await addDoc(collection(db, "scores"), {
+            const scoreData = {
                 studentName,
                 itemName,
                 itemType,
@@ -69,15 +72,47 @@ const Dashboard = () => {
                 score: Number(score),
                 category,
                 timestamp: serverTimestamp()
-            });
-            // Reset logic
+            };
+
+            if (editingScoreId) {
+                // Update existing
+                await setDoc(doc(db, "scores", editingScoreId), scoreData, { merge: true });
+                alert("Score updated successfully!");
+                setEditingScoreId(null);
+            } else {
+                // Create new
+                await addDoc(collection(db, "scores"), scoreData);
+                alert("Score added successfully!");
+            }
+
+            // Reset form
             setStudentName('');
             setItemName('');
             setScore('');
         } catch (err) {
-            alert("Error adding score: " + err.message);
+            alert("Error saving score: " + err.message);
         }
         setLoading(false);
+    };
+
+    const handleEdit = (scoreItem) => {
+        setStudentName(scoreItem.studentName);
+        setItemName(scoreItem.itemName);
+        setItemType(scoreItem.itemType || 'Individual');
+        setGroup(scoreItem.group);
+        setScore(scoreItem.score);
+        setCategory(scoreItem.category);
+        setEditingScoreId(scoreItem.id);
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleCancelEdit = () => {
+        setStudentName('');
+        setItemName('');
+        setScore('');
+        setEditingScoreId(null);
     };
 
     const handleDelete = async (id) => {
@@ -142,9 +177,9 @@ const Dashboard = () => {
                 {/* 1. Add Score Form */}
                 <div className="lg:col-span-2 glass-card p-6 rounded-2xl">
                     <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                        <span className="badge badge-primary badge-lg">1</span> Add Points
+                        <span className="badge badge-primary badge-lg">1</span> {editingScoreId ? 'Edit Score' : 'Add Points'}
                     </h2>
-                    <form onSubmit={handleAddScore} className="space-y-4">
+                    <form onSubmit={handleSaveScore} className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="form-control">
                                 <label className="label"><span className="label-text text-slate-300">Category</span></label>
@@ -242,13 +277,24 @@ const Dashboard = () => {
                             />
                         </div>
 
-                        <button
-                            type="submit"
-                            className={`btn btn-primary w-full text-lg mt-4 ${loading ? 'loading' : ''}`}
-                            disabled={loading}
-                        >
-                            {loading ? 'Adding...' : 'Publish Score +'}
-                        </button>
+                        <div className="flex gap-2">
+                            {editingScoreId && (
+                                <button
+                                    type="button"
+                                    onClick={handleCancelEdit}
+                                    className="btn btn-ghost flex-1 text-slate-400"
+                                >
+                                    Cancel
+                                </button>
+                            )}
+                            <button
+                                type="submit"
+                                className={`btn btn-primary flex-[2] text-lg mt-4 ${loading ? 'loading' : ''}`}
+                                disabled={loading}
+                            >
+                                {loading ? 'Saving...' : (editingScoreId ? 'Update Score' : 'Publish Score +')}
+                            </button>
+                        </div>
                     </form>
                 </div>
 
@@ -373,7 +419,10 @@ const Dashboard = () => {
                                             </td>
                                             <td className="font-mono font-bold text-white">+{s.score}</td>
                                             <td>
-                                                <button onClick={() => handleDelete(s.id)} className="btn btn-ghost btn-xs text-error">Delete</button>
+                                                <div className="flex gap-2">
+                                                    <button onClick={() => handleEdit(s)} className="btn btn-ghost btn-xs text-info">Edit</button>
+                                                    <button onClick={() => handleDelete(s.id)} className="btn btn-ghost btn-xs text-error">Delete</button>
+                                                </div>
                                             </td>
                                         </tr>
                                     );
