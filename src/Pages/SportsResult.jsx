@@ -43,8 +43,8 @@ const SportsResult = () => {
         return () => { unsubGroups(); unsubScores(); };
     }, []);
 
-    // Default Group IDs
-    const groupIds = ["Nishan", "Nagara", "Dhankul", "Bansuri"];
+    // Use dynamic Group IDs from config
+    const groupIds = Object.keys(groupsConfig);
 
     const groupScores = groupIds.map(id => {
         const name = groupsConfig[id]?.name || id;
@@ -110,7 +110,7 @@ const SportsResult = () => {
                                 <div
                                     className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mb-4 shadow-lg"
                                     style={{
-                                        backgroundColor: index < 3 ? group.color : '#334155',
+                                        backgroundColor: group.color,
                                         color: '#fff',
                                         boxShadow: `0 0 20px -5px ${group.color}`
                                     }}

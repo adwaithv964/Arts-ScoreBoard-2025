@@ -48,7 +48,7 @@ const Footer = () => {
                 <div className="text-center">
                     <p className="text-slate-500 text-sm font-medium">Created by <span className="text-blue-400">Adwaith V</span></p>
                     <p className="text-slate-600 text-xs font-medium"> </p>
-                    <p className="text-slate-600 text-xs font-medium">BSC CS</p>
+                    <p className="text-slate-600 text-xs font-medium">3rd BSC CS</p>
                 </div>
             </aside>
         </footer>
