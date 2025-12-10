@@ -3,7 +3,7 @@ import { NavLink, Link } from 'react-router-dom';
 
 const Navbar = () => {
     return (
-        <div className="navbar fixed top-0 z-50 px-4 py-3 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/10">
+        <div className="navbar fixed top-0 z-50 px-2 py-2 md:px-4 md:py-3 bg-[#0f172a]/80 backdrop-blur-md border-b border-white/10">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost normal-case text-xl md:text-2xl font-bold tracking-tight text-white gap-2">
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
@@ -43,8 +43,12 @@ const Navbar = () => {
 const Footer = () => {
     return (
         <footer className="footer items-center p-4 bg-neutral-900/50 text-neutral-content mt-auto backdrop-blur-sm border-t border-white/5">
-            <aside className="items-center grid-flow-col">
-                <p className="text-slate-400">Copyright © 2025 - All rights reserved by Department of Computer Science</p>
+            <aside className="items-center grid-flow-col flex flex-col gap-1">
+                <p className="text-slate-400 text-center">Copyright © 2025 - All rights reserved by Department of Computer Science</p>
+                <div className="text-center">
+                    <p className="text-slate-500 text-sm font-medium">Created by <span className="text-blue-400">Adwaith V</span></p>
+                    <p className="text-slate-600 text-xs font-medium">BSC CS</p>
+                </div>
             </aside>
         </footer>
     );
@@ -54,7 +58,7 @@ const Layout = ({ children }) => {
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-            <main className="flex-grow pt-20 px-4 pb-10 container mx-auto">
+            <main className="flex-grow pt-16 md:pt-20 px-2 md:px-4 pb-10 container mx-auto">
                 {children}
             </main>
             <Footer />

@@ -86,14 +86,14 @@ const SportsResult = () => {
     return (
         <div className="space-y-12 animate-fade-in-up">
             {/* Header Section */}
-            <div className="relative w-full h-64 rounded-3xl overflow-hidden shadow-2xl group">
+            <div className="relative w-full h-48 md:h-64 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group">
                 <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: "url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2070&auto=format&fit=crop')" }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-8">
-                    <h1 className="text-6xl font-black text-white tracking-tight drop-shadow-lg">Sports <span className="text-purple-400">2025</span></h1>
-                    <p className="text-gray-300 text-lg mt-2 font-medium">Sports Meet Scoreboard</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4 md:p-8">
+                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-lg">Sports <span className="text-purple-400">2025</span></h1>
+                    <p className="text-gray-300 text-sm md:text-lg mt-1 md:mt-2 font-medium">Sports Meet Scoreboard</p>
                 </div>
             </div>
 
@@ -137,11 +137,11 @@ const SportsResult = () => {
                     <table className="table w-full text-slate-300">
                         <thead className="bg-slate-800/50 text-white font-bold uppercase text-sm tracking-wider">
                             <tr>
-                                <th className="rounded-l-lg py-4">Student</th>
-                                <th className="py-4">Event</th>
-                                <th className="py-4">Type</th>
-                                <th className="py-4">Group</th>
-                                <th className="rounded-r-lg py-4 text-right pr-8">Score</th>
+                                <th className="rounded-l-lg py-3 md:py-4">Student</th>
+                                <th className="py-3 md:py-4">Event</th>
+                                <th className="py-3 md:py-4">Type</th>
+                                <th className="py-3 md:py-4">Group</th>
+                                <th className="rounded-r-lg py-3 md:py-4 text-right pr-4 md:pr-8">Score</th>
                             </tr>
                         </thead>
                         <tbody className="text-base">
@@ -149,9 +149,9 @@ const SportsResult = () => {
                                 paginatedData.map((e) => {
                                     const grp = groupsConfig[e.group] || { name: e.group, color: '#94a3b8' };
                                     return (
-                                        <tr key={e.id} className="hover:bg-white/5 border-b border-white/5 transition-colors">
-                                            <td className="font-bold text-white py-4">{e.studentName}</td>
-                                            <td className="py-4">{e.itemName}</td>
+                                        <tr key={e.id} className="hover:bg-white/5 border-b border-white/5 transition-colors text-sm md:text-base">
+                                            <td className="font-bold text-white py-3 md:py-4 whitespace-nowrap">{e.studentName}</td>
+                                            <td className="py-3 md:py-4 whitespace-nowrap">{e.itemName}</td>
                                             <td className="py-4">
                                                 <span className="badge badge-sm badge-ghost">{e.itemType || '-'}</span>
                                             </td>
@@ -163,7 +163,7 @@ const SportsResult = () => {
                                                     {grp.name}
                                                 </span>
                                             </td>
-                                            <td className="font-bold text-white text-right pr-8 py-4">+{e.score}</td>
+                                            <td className="font-bold text-white text-right pr-4 md:pr-8 py-3 md:py-4">+{e.score}</td>
                                         </tr>
                                     );
                                 })
