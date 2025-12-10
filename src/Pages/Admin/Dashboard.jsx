@@ -21,6 +21,10 @@ const Dashboard = () => {
     const [groupsData, setGroupsData] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // Group Management States
+    const [newGroupName, setNewGroupName] = useState('');
+    const [newGroupColor, setNewGroupColor] = useState('#000000');
+
     // Default Groups Config (fallback)
     const defaultGroups = [
         { id: 'Nishan', name: 'Nishan', color: '#ef4444' }, // Red
@@ -87,6 +91,38 @@ const Dashboard = () => {
             await setDoc(doc(db, "groups", id), { [field]: value }, { merge: true });
         } catch (err) {
             console.error("Failed to update group", err);
+        }
+    };
+
+    const handleAddGroup = async (e) => {
+        e.preventDefault();
+        if (!newGroupName.trim()) return;
+
+        // Create ID from name (remove spaces, etc)
+        const id = newGroupName.replace(/\s+/g, '').trim();
+
+        try {
+            await setDoc(doc(db, "groups", id), {
+                name: newGroupName,
+                color: newGroupColor
+            });
+            setNewGroupName('');
+            setNewGroupColor('#000000');
+            alert("Group added successfully!");
+        } catch (err) {
+            console.error("Error adding group:", err);
+            alert("Error adding group: " + err.message);
+        }
+    };
+
+    const handleDeleteGroup = async (id) => {
+        if (window.confirm("Are you sure you want to delete this group? valid scores might lose their group association.")) {
+            try {
+                await deleteDoc(doc(db, "groups", id));
+            } catch (err) {
+                console.error("Error deleting group:", err);
+                alert("Error deleting group");
+            }
         }
     };
 
@@ -222,6 +258,35 @@ const Dashboard = () => {
                         <span className="badge badge-secondary badge-lg">2</span> Edit Groups
                     </h2>
                     <div className="space-y-4">
+                        {/* Add New Group Form */}
+                        <div className="bg-slate-800/50 p-4 rounded-xl border border-white/10 mb-6">
+                            <h3 className="font-bold text-white text-sm mb-3">Add New Group</h3>
+                            <div className="flex flex-col gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Group Name"
+                                    className="input input-sm input-bordered bg-slate-900 text-white w-full"
+                                    value={newGroupName}
+                                    onChange={(e) => setNewGroupName(e.target.value)}
+                                />
+                                <div className="flex gap-2">
+                                    <input
+                                        type="color"
+                                        className="h-8 w-10 rounded cursor-pointer"
+                                        value={newGroupColor}
+                                        onChange={(e) => setNewGroupColor(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={handleAddGroup}
+                                        disabled={!newGroupName}
+                                        className="btn btn-sm btn-success flex-1"
+                                    >
+                                        Add Group
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         {groupsData.map(g => (
                             <div key={g.id} className="collapse collapse-arrow bg-slate-800/30 border border-white/5">
                                 <input type="checkbox" />
@@ -255,6 +320,14 @@ const Dashboard = () => {
                                                 onChange={(e) => handleUpdateGroup(g.id, 'color', e.target.value)}
                                             />
                                         </div>
+                                    </div>
+                                    <div className="pt-2">
+                                        <button
+                                            onClick={() => handleDeleteGroup(g.id)}
+                                            className="btn btn-xs btn-error btn-outline w-full"
+                                        >
+                                            Delete Group
+                                        </button>
                                     </div>
                                 </div>
                             </div>
