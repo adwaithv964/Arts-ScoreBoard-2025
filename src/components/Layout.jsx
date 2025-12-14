@@ -42,14 +42,15 @@ const Navbar = () => {
 
 const Footer = () => {
     return (
-        <footer className="footer items-center p-4 bg-neutral-900/50 text-neutral-content mt-auto backdrop-blur-sm border-t border-white/5">
+        <footer className="footer footer-center justify-center items-center p-4 bg-neutral-900/50 text-neutral-content mt-auto backdrop-blur-sm border-t border-white/5">
             <aside className="items-center grid-flow-col flex flex-col gap-1">
-                <p className="text-slate-400 text-center"></p>
+
                 <div className="text-center">
-                    <p className="text-slate-500 text-sm font-medium">Created by <span className="text-blue-400">Adwaith V</span></p>
-                    <p className="text-slate-600 text-xs font-medium"> </p>
-                    <p className="text-slate-600 text-xs font-medium">3rd BSC CS</p>
+                    <p className="text-slate-500 text-sm font-medium">Created by <span className="text-blue-400 font-bold">Adwaith V</span></p>
+                    <p className="px-3 py-0.5 text-xs font-semibold text-slate-300 tracking-wide shadow-sm">3rd BSC CS</p>
                 </div>
+                <br></br>
+                <p className="text-slate-400 text-center">Copyright © 2025 - All rights reserved</p>
             </aside>
         </footer>
     );
