@@ -44,7 +44,7 @@ const Footer = () => {
     return (
         <footer className="footer items-center p-4 bg-neutral-900/50 text-neutral-content mt-auto backdrop-blur-sm border-t border-white/5">
             <aside className="items-center grid-flow-col flex flex-col gap-1">
-                <p className="text-slate-400 text-center">Copyright © 2025 - All rights reserved by Department of Computer Science</p>
+                <p className="text-slate-400 text-center"></p>
                 <div className="text-center">
                     <p className="text-slate-500 text-sm font-medium">Created by <span className="text-blue-400">Adwaith V</span></p>
                     <p className="text-slate-600 text-xs font-medium"> </p>
