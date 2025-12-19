@@ -30,10 +30,10 @@ const Dashboard = () => {
 
     // Default Groups Config (fallback)
     const defaultGroups = [
-        { id: 'Nishan', name: 'Nishan', color: '#ef4444' }, // Red
-        { id: 'Nagara', name: 'Nagara', color: '#22c55e' }, // Green
-        { id: 'Dhankul', name: 'Dhankul', color: '#3b82f6' }, // Blue
-        { id: 'Bansuri', name: 'Bansuri', color: '#a855f7' }  // Purple
+        { id: 'Group_1', name: 'Group_1', color: '#ef4444' }, // Red
+        { id: 'Group_2', name: 'Group_2', color: '#22c55e' }, // Green
+        { id: 'Group_3', name: 'group_3', color: '#3b82f6' }, // Blue
+        { id: 'group_4', name: 'Group_4', color: '#a855f7' }  // Purple
     ];
 
     useEffect(() => {
@@ -130,11 +130,13 @@ const Dashboard = () => {
         }
     };
 
-    const handleUpdateGroup = async (id, field, value) => {
+    const handleUpdateGroup = async (id, updates) => {
         try {
-            await setDoc(doc(db, "groups", id), { [field]: value }, { merge: true });
+            await setDoc(doc(db, "groups", id), updates, { merge: true });
+            alert("Group updated successfully!");
         } catch (err) {
             console.error("Failed to update group", err);
+            alert("Failed to update group");
         }
     };
 
@@ -329,7 +331,7 @@ const Dashboard = () => {
                                 <div className="flex gap-2">
                                     <input
                                         type="color"
-                                        className="h-8 w-10 rounded cursor-pointer"
+                                        className="h-10 w-12 rounded cursor-pointer border-2 border-white/20 p-0 overflow-hidden"
                                         value={newGroupColor}
                                         onChange={(e) => setNewGroupColor(e.target.value)}
                                     />
@@ -345,49 +347,12 @@ const Dashboard = () => {
                         </div>
 
                         {groupsData.map(g => (
-                            <div key={g.id} className="collapse collapse-arrow bg-slate-800/30 border border-white/5">
-                                <input type="checkbox" />
-                                <div className="collapse-title font-bold text-white flex items-center gap-2">
-                                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: g.color }}></div>
-                                    {g.name}
-                                </div>
-                                <div className="collapse-content space-y-3 pt-2">
-                                    <div className="form-control">
-                                        <label className="label-text text-xs text-slate-400">Display Name</label>
-                                        <input
-                                            type="text"
-                                            className="input input-sm input-bordered bg-slate-900 text-white"
-                                            value={g.name}
-                                            onChange={(e) => handleUpdateGroup(g.id, 'name', e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="form-control">
-                                        <label className="label-text text-xs text-slate-400">Color (Hex)</label>
-                                        <div className="flex gap-2">
-                                            <input
-                                                type="color"
-                                                className="w-8 h-8 rounded cursor-pointer"
-                                                value={g.color}
-                                                onChange={(e) => handleUpdateGroup(g.id, 'color', e.target.value)}
-                                            />
-                                            <input
-                                                type="text"
-                                                className="input input-sm input-bordered bg-slate-900 text-white w-full"
-                                                value={g.color}
-                                                onChange={(e) => handleUpdateGroup(g.id, 'color', e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="pt-2">
-                                        <button
-                                            onClick={() => handleDeleteGroup(g.id)}
-                                            className="btn btn-xs btn-error btn-outline w-full"
-                                        >
-                                            Delete Group
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <GroupRow
+                                key={g.id}
+                                group={g}
+                                onUpdate={handleUpdateGroup}
+                                onDelete={handleDeleteGroup}
+                            />
                         ))}
                     </div>
                 </div>
@@ -457,6 +422,87 @@ const Dashboard = () => {
                             <div className="text-slate-600">{g.id}</div>
                         </div>
                     ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Sub-component for Group Row to handle local state editing
+const GroupRow = ({ group, onUpdate, onDelete }) => {
+    const [name, setName] = useState(group.name);
+    const [color, setColor] = useState(group.color);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [isDirty, setIsDirty] = useState(false);
+
+    // Sync state if props change (e.g. from DB update elsewhere)
+    useEffect(() => {
+        setName(group.name);
+        setColor(group.color);
+        setIsDirty(false); // Reset dirty state on prop change
+    }, [group.name, group.color]);
+
+    const handleChange = (setter, value) => {
+        setter(value);
+        setIsDirty(true);
+    };
+
+    const handleSave = () => {
+        onUpdate(group.id, { name, color });
+        setIsDirty(false);
+    };
+
+    return (
+        <div className={`collapse collapse-arrow bg-slate-800/30 border border-white/5 ${isExpanded ? 'collapse-open' : 'collapse-close'}`}>
+            <input type="checkbox" checked={isExpanded} onChange={() => setIsExpanded(!isExpanded)} />
+            <div className="collapse-title font-bold text-white flex items-center gap-2" onClick={() => setIsExpanded(!isExpanded)}>
+                <div className="w-4 h-4 rounded-full border border-white/20" style={{ backgroundColor: color }}></div>
+                {name}
+                {isDirty && <span className="badge badge-xs badge-warning ml-2">Unsaved</span>}
+            </div>
+            <div className="collapse-content space-y-3 pt-2 cursor-auto" onClick={(e) => e.stopPropagation()}>
+                <div className="form-control">
+                    <label className="label-text text-xs text-slate-400">Display Name</label>
+                    <input
+                        type="text"
+                        className="input input-sm input-bordered bg-slate-900 text-white"
+                        value={name}
+                        onChange={(e) => handleChange(setName, e.target.value)}
+                    />
+                </div>
+                <div className="form-control">
+                    <label className="label-text text-xs text-slate-400">Color (Hex)</label>
+                    <div className="flex gap-2">
+                        <div className="relative">
+                            <input
+                                type="color"
+                                className="w-10 h-10 rounded cursor-pointer border-2 border-white/20 p-0 overflow-hidden"
+                                value={color}
+                                onChange={(e) => handleChange(setColor, e.target.value)}
+                            />
+                        </div>
+                        <input
+                            type="text"
+                            className="input input-sm input-bordered bg-slate-900 text-white w-full font-mono"
+                            value={color}
+                            onChange={(e) => handleChange(setColor, e.target.value)}
+                        />
+                    </div>
+                </div>
+                <div className="pt-2 flex gap-2">
+                    <button
+                        onClick={handleSave}
+                        disabled={!isDirty}
+                        className="btn btn-sm btn-success flex-1 text-white"
+                    >
+                        Save Changes
+                    </button>
+                    <button
+                        onClick={() => onDelete(group.id)}
+                        className="btn btn-sm btn-error btn-outline"
+                    >
+                        Delete
+                    </button>
                 </div>
             </div>
         </div>

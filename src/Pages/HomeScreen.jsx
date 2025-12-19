@@ -60,7 +60,7 @@ const HomeScreen = () => {
         // Use dynamic name if available, else ID
         const name = groupsConfig[id]?.name || id;
         const fixedConfig = FIXED_GROUP_CONFIG[name?.toUpperCase()];
-        const color = fixedConfig?.color || groupsConfig[id]?.color || '#ffffff';
+        const color = groupsConfig[id]?.color || fixedConfig?.color || '#ffffff';
         const fixedNumber = fixedConfig?.number;
 
         const total = data
@@ -114,17 +114,17 @@ const HomeScreen = () => {
                             </div>
                             <div className="relative z-10 flex flex-col items-center">
                                 <div
-                                    className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mb-4 shadow-lg"
+                                    className="w-20 h-20 rounded-full flex flex-col items-center justify-center mb-4 shadow-lg"
                                     style={{
                                         backgroundColor: group.color,
                                         color: '#fff',
                                         boxShadow: `0 0 20px -5px ${group.color}`
                                     }}
                                 >
-                                    {group.fixedNumber || index + 1}
+                                    <span className="text-[10px] font-bold uppercase tracking-wider leading-tight">Group</span>
+                                    <span className="text-2xl font-black leading-none">{group.fixedNumber || index + 1}</span>
                                 </div>
                                 <h3 className="text-2xl font-bold text-white uppercase tracking-wider text-center flex flex-col items-center gap-1">
-                                    {group.fixedNumber && <span className="text-lg opacity-90">Group {group.fixedNumber}</span>}
                                     <span>{group.name}</span>
                                 </h3>
                                 <div className="text-5xl font-black text-blue-400 mt-2">{group.score}</div>
