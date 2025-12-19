@@ -96,7 +96,7 @@ const HomeScreen = () => {
     }
 
     return (
-        <div className="space-y-12 animate-fade-in-up">
+        <div className="space-y-12 animate-fade-in-up pt-4">
             {/* Header Section */}
             <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group bg-black flex justify-center">
                 <img
