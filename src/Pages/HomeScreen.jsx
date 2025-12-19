@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase-config';
-import FireBanner from '../components/FireBanner';
+import FireBannerComponent from '../components/FireBanner';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
 const FIXED_GROUP_CONFIG = {
@@ -100,7 +100,7 @@ const HomeScreen = () => {
         <div className="space-y-12 animate-fade-in-up pt-4">
             {/* Header Section */}
             <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group bg-black flex justify-center relative">
-                <FireBanner />
+                <FireBannerComponent />
             </div>
 
             {/* Leaderboard Section */}
@@ -109,8 +109,8 @@ const HomeScreen = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {groupScores.map((group, index) => (
                         <div key={group.id} className="relative glass-card rounded-2xl p-6 overflow-hidden transition-all hover:-translate-y-2 hover:shadow-blue-500/20">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <span className="text-9xl font-black">{index + 1}</span>
+                            <div className="absolute top-0 right-0 p-4 opacity-30">
+                                <span className="text-9xl font-black text-cyan-400">{index + 1}</span>
                             </div>
                             <div className="relative z-10 flex flex-col items-center">
                                 <div
@@ -123,7 +123,10 @@ const HomeScreen = () => {
                                 >
                                     {group.fixedNumber || index + 1}
                                 </div>
-                                <h3 className="text-2xl font-bold text-white uppercase tracking-wider text-center">{group.name}</h3>
+                                <h3 className="text-2xl font-bold text-white uppercase tracking-wider text-center flex flex-col items-center gap-1">
+                                    {group.fixedNumber && <span className="text-lg opacity-90">Group {group.fixedNumber}</span>}
+                                    <span>{group.name}</span>
+                                </h3>
                                 <div className="text-5xl font-black text-blue-400 mt-2">{group.score}</div>
                                 <p className="text-sm text-slate-400 mt-1 uppercase tracking-widest">Points</p>
                             </div>
