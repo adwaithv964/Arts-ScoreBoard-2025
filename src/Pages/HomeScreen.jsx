@@ -100,7 +100,7 @@ const HomeScreen = () => {
             {/* Header Section */}
             <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group bg-black flex justify-center">
                 <img
-                    src="/arts_banner.png"
+                    src="/arts_banner__.png"
                     alt="Arts Festival Banner"
                     className="w-auto h-auto md:max-h-[500px] object-contain transition-transform duration-700 group-hover:scale-105"
                 />
