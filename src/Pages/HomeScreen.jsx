@@ -90,14 +90,13 @@ const HomeScreen = () => {
     return (
         <div className="space-y-12 animate-fade-in-up">
             {/* Header Section */}
-            <div className="relative w-full h-48 md:h-64 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group">
+            <div className="relative w-full h-48 md:h-96 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group">
                 <div
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: "url('https://images.unsplash.com/photo-1523174802553-10fd69b213ec?q=80&w=2069&auto=format&fit=crop')" }}
+                    style={{ backgroundImage: "url('/arts_banner.png')" }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4 md:p-8">
-                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight drop-shadow-lg">Arts <span className="text-blue-400">2025</span></h1>
-                    <p className="text-gray-300 text-sm md:text-lg mt-1 md:mt-2 font-medium">Fine Arts Festival Scoreboard</p>
+                    {/* Text removed as it is now embedded in the banner image */}
                 </div>
             </div>
 

@@ -12,7 +12,7 @@ const Dashboard = () => {
     const [studentName, setStudentName] = useState('');
     const [itemName, setItemName] = useState('');
     const [itemType, setItemType] = useState('Individual');
-    const [group, setGroup] = useState('Nishan'); // Default ID, label might change
+    const [group, setGroup] = useState('');
     const [score, setScore] = useState('');
     const [category, setCategory] = useState('Arts');
 
@@ -47,13 +47,22 @@ const Dashboard = () => {
         const qGroups = collection(db, "groups");
         const unsubGroups = onSnapshot(qGroups, (snapshot) => {
             if (!snapshot.empty) {
-                setGroupsData(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+                const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                setGroupsData(groups);
+
+                // Set default group if not set or invalid
+                setGroup(prevGroup => {
+                    const isValid = groups.some(g => g.id === prevGroup);
+                    return isValid ? prevGroup : (groups[0]?.id || '');
+                });
+
             } else {
                 setGroupsData(defaultGroups);
                 // Initialize groups if empty (one-time)
                 defaultGroups.forEach(g => {
                     setDoc(doc(db, "groups", g.id), g);
                 });
+                setGroup(defaultGroups[0].id);
             }
         });
 
