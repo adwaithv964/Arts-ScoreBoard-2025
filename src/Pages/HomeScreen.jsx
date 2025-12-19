@@ -95,7 +95,7 @@ const HomeScreen = () => {
                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                     style={{ backgroundImage: "url('/arts_banner.png')" }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4 md:p-8">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex flex-col justify-end p-4 md:p-8">
                     {/* Text removed as it is now embedded in the banner image */}
                 </div>
             </div>

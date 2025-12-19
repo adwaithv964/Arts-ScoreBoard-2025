@@ -53,7 +53,7 @@ const Dashboard = () => {
                 // Set default group if not set or invalid
                 setGroup(prevGroup => {
                     const isValid = groups.some(g => g.id === prevGroup);
-                    return isValid ? prevGroup : (groups[0]?.id || '');
+                    return isValid ? prevGroup : '';
                 });
 
             } else {
@@ -62,7 +62,7 @@ const Dashboard = () => {
                 defaultGroups.forEach(g => {
                     setDoc(doc(db, "groups", g.id), g);
                 });
-                setGroup(defaultGroups[0].id);
+                setGroup('');
             }
         });
 
@@ -242,7 +242,9 @@ const Dashboard = () => {
                                     className="select select-bordered bg-slate-800/50 text-white"
                                     value={group}
                                     onChange={(e) => setGroup(e.target.value)}
+                                    required
                                 >
+                                    <option value="" disabled>Select Group</option>
                                     {groupsData.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
                                 </select>
                             </div>
@@ -423,7 +425,10 @@ const Dashboard = () => {
                                             <td>{s.itemName}</td>
                                             <td>
                                                 <span className="font-bold" style={{ color: grp.color }}>
-                                                    {grp.name || s.group}
+                                                    {grp.name || 'Unknown'}
+                                                </span>
+                                                <span className="text-xs text-slate-500 ml-1 font-mono">
+                                                    [{s.group}]
                                                 </span>
                                             </td>
                                             <td className="font-mono font-bold text-white">+{s.score}</td>
@@ -439,6 +444,19 @@ const Dashboard = () => {
                             )}
                         </tbody>
                     </table>
+                </div>
+            </div>
+
+            {/* Debug Section */}
+            <div className="p-4 bg-black/50 rounded-xl font-mono text-xs text-slate-400">
+                <h3 className="font-bold text-white mb-2">Debug Data (Groups)</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    {groupsData.map(g => (
+                        <div key={g.id} className="border border-slate-700 p-2 rounded">
+                            <div className="text-white">{g.name}</div>
+                            <div className="text-slate-600">{g.id}</div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
