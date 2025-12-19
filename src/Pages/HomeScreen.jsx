@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../firebase-config';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
+const FIXED_GROUP_CONFIG = {
+    'DHYUTHI': { color: '#0066FF', number: 1 },  // Blue
+    'DHWANI': { color: '#FF00FF', number: 2 },   // Pink
+    'DHIVA': { color: '#FFD700', number: 3 }     // Yellow
+};
+
 const HomeScreen = () => {
     const [data, setData] = useState([]);
     const [groupsConfig, setGroupsConfig] = useState({});
@@ -52,13 +58,15 @@ const HomeScreen = () => {
     const groupScores = groupIds.map(id => {
         // Use dynamic name if available, else ID
         const name = groupsConfig[id]?.name || id;
-        const color = groupsConfig[id]?.color || '#ffffff';
+        const fixedConfig = FIXED_GROUP_CONFIG[name?.toUpperCase()];
+        const color = fixedConfig?.color || groupsConfig[id]?.color || '#ffffff';
+        const fixedNumber = fixedConfig?.number;
 
         const total = data
             .filter(e => e.group === id)
             .reduce((sum, e) => sum + e.score, 0);
 
-        return { id, name, score: total, color };
+        return { id, name, score: total, color, fixedNumber };
     }).sort((a, b) => b.score - a.score);
 
     // Pagination
@@ -90,14 +98,12 @@ const HomeScreen = () => {
     return (
         <div className="space-y-12 animate-fade-in-up">
             {/* Header Section */}
-            <div className="relative w-full h-48 md:h-96 rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group">
-                <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{ backgroundImage: "url('/arts_banner.png')" }}
+            <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group bg-black flex justify-center">
+                <img
+                    src="/arts_banner.png"
+                    alt="Arts Festival Banner"
+                    className="w-auto h-auto md:max-h-[500px] object-contain transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex flex-col justify-end p-4 md:p-8">
-                    {/* Text removed as it is now embedded in the banner image */}
-                </div>
             </div>
 
             {/* Leaderboard Section */}
@@ -118,7 +124,7 @@ const HomeScreen = () => {
                                         boxShadow: `0 0 20px -5px ${group.color}`
                                     }}
                                 >
-                                    {index + 1}
+                                    {group.fixedNumber || index + 1}
                                 </div>
                                 <h3 className="text-2xl font-bold text-white uppercase tracking-wider text-center">{group.name}</h3>
                                 <div className="text-5xl font-black text-blue-400 mt-2">{group.score}</div>
@@ -150,7 +156,9 @@ const HomeScreen = () => {
                         <tbody className="text-base">
                             {paginatedData.length > 0 ? (
                                 paginatedData.map((e) => {
-                                    const grp = groupsConfig[e.group] || { name: e.group, color: '#94a3b8' };
+                                    const rawGrp = groupsConfig[e.group] || { name: e.group, color: '#94a3b8' };
+                                    const fixedConfig = FIXED_GROUP_CONFIG[rawGrp.name?.toUpperCase()];
+                                    const grp = { ...rawGrp, color: fixedConfig?.color || rawGrp.color };
                                     return (
                                         <tr key={e.id} className="hover:bg-white/5 border-b border-white/5 transition-colors text-sm md:text-base">
                                             <td className="font-bold text-white py-3 md:py-4 whitespace-nowrap">{e.studentName}</td>
