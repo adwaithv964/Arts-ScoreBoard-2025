@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase-config';
+import FireBanner from '../components/FireBanner';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
 const FIXED_GROUP_CONFIG = {
@@ -98,12 +99,8 @@ const HomeScreen = () => {
     return (
         <div className="space-y-12 animate-fade-in-up pt-4">
             {/* Header Section */}
-            <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group bg-black flex justify-center">
-                <img
-                    src="/arts_banner__.png"
-                    alt="Arts Festival Banner"
-                    className="w-auto h-auto md:max-h-[500px] object-contain transition-transform duration-700 group-hover:scale-105"
-                />
+            <div className="w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl group bg-black flex justify-center relative">
+                <FireBanner />
             </div>
 
             {/* Leaderboard Section */}
