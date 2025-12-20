@@ -10,7 +10,6 @@ const SportsResult = () => {
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        // 1. Fetch Group Configs
         const unsubGroups = onSnapshot(collection(db, "groups"), (snap) => {
             const config = {};
             snap.docs.forEach(doc => {
@@ -19,7 +18,6 @@ const SportsResult = () => {
             setGroupsConfig(config);
         });
 
-        // 2. Fetch Sports Scores Only
         const q = query(
             collection(db, "scores"),
             where("category", "==", "Sports"),

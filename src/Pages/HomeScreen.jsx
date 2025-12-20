@@ -4,9 +4,9 @@ import FireBannerComponent from '../Components/FireBanner';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
 const FIXED_GROUP_CONFIG = {
-    'DHYUTHI': { color: '#0066FF', number: 1 },  // Blue
-    'DHWANI': { color: '#FF00FF', number: 2 },   // Pink
-    'DHIVA': { color: '#FFD700', number: 3 }     // Yellow
+    'DHYUTHI': { color: '#0066FF', number: 1 }, 
+    'DHWANI': { color: '#FF00FF', number: 2 },   
+    'DHIVA': { color: '#FFD700', number: 3 }     
 };
 
 const HomeScreen = () => {
@@ -17,7 +17,6 @@ const HomeScreen = () => {
     const [page, setPage] = useState(0);
 
     useEffect(() => {
-        // 1. Fetch Group Configs
         const unsubGroups = onSnapshot(collection(db, "groups"), (snap) => {
             const config = {};
             snap.docs.forEach(doc => {
@@ -26,7 +25,6 @@ const HomeScreen = () => {
             setGroupsConfig(config);
         });
 
-        // 2. Fetch Arts Scores Only
         const q = query(
             collection(db, "scores"),
             where("category", "==", "Arts"),
@@ -50,8 +48,6 @@ const HomeScreen = () => {
         return () => { unsubGroups(); unsubScores(); };
     }, []);
 
-    // Calculate Group Scores based on live data
-    // Use dynamic Group IDs from config
     const groupIds = Object.keys(groupsConfig);
 
     const groupScores = groupIds.map(id => {
