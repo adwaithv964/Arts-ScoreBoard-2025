@@ -9,18 +9,7 @@ const FireBanner = () => {
         let animationFrameId;
         let particles = [];
 
-        const resizeCanvas = () => {
-            // Set canvas size to match parent container (which will match the image)
-            const parent = canvas.parentElement;
-            if (parent) {
-                canvas.width = parent.clientWidth;
-                canvas.height = parent.clientHeight;
-            }
-        };
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
+        // Initialize particle system
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
@@ -74,6 +63,24 @@ const FireBanner = () => {
             }
         };
 
+        const resizeCanvas = () => {
+            const parent = canvas.parentElement;
+            if (parent) {
+                canvas.width = parent.clientWidth;
+                canvas.height = parent.clientHeight;
+                initParticles(); // Re-initialize particles when size changes
+            }
+        };
+
+        // Use ResizeObserver to detect size changes correctly (handles image loading)
+        const resizeObserver = new ResizeObserver(() => {
+            resizeCanvas();
+        });
+
+        if (canvas.parentElement) {
+            resizeObserver.observe(canvas.parentElement);
+        }
+
         const animate = () => {
             // Clear with a slight transparency for trail effect (optional, but clean clear is better for overlay)
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -90,11 +97,10 @@ const FireBanner = () => {
             animationFrameId = requestAnimationFrame(animate);
         };
 
-        initParticles();
         animate();
 
         return () => {
-            window.removeEventListener('resize', resizeCanvas);
+            resizeObserver.disconnect();
             cancelAnimationFrame(animationFrameId);
         };
     }, []);

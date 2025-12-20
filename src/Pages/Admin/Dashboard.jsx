@@ -30,10 +30,10 @@ const Dashboard = () => {
 
     // Default Groups Config (fallback)
     const defaultGroups = [
-        { id: 'Group_1', name: 'Group_1', color: '#ef4444' }, // Red
-        { id: 'Group_2', name: 'Group_2', color: '#22c55e' }, // Green
-        { id: 'Group_3', name: 'group_3', color: '#3b82f6' }, // Blue
-        { id: 'group_4', name: 'Group_4', color: '#a855f7' }  // Purple
+        { id: 'Group_1', name: 'Group_1', color: '#ef4444' }, 
+        { id: 'Group_2', name: 'Group_2', color: '#22c55e' },
+        { id: 'Group_3', name: 'group_3', color: '#3b82f6' }, 
+        { id: 'group_4', name: 'Group_4', color: '#a855f7' } 
     ];
 
     useEffect(() => {
