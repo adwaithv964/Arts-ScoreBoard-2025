@@ -37,7 +37,6 @@ const HomeScreen = () => {
             const scoresData = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
             setData(scoresData);
             setLoading(false);
-            // Cache for offline
             localStorage.setItem("arts_data", JSON.stringify(scoresData));
         }, (err) => {
             console.error("Error fetching live data:", err);
@@ -51,7 +50,6 @@ const HomeScreen = () => {
         return () => { unsubGroups(); unsubScores(); };
     }, []);
 
-    // Calculate Group Scores based on live data
     // Calculate Group Scores based on live data
     // Use dynamic Group IDs from config
     const groupIds = Object.keys(groupsConfig);

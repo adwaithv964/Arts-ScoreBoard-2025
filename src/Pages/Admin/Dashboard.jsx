@@ -24,33 +24,29 @@ const Dashboard = () => {
     const [groupsData, setGroupsData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // Group Management States
     const [newGroupName, setNewGroupName] = useState('');
     const [newGroupColor, setNewGroupColor] = useState('#000000');
 
-    // Default Groups Config (fallback)
+    // Default Groups Config
     const defaultGroups = [
-        { id: 'Group_1', name: 'Group_1', color: '#ef4444' }, 
+        { id: 'Group_1', name: 'Group_1', color: '#ef4444' },
         { id: 'Group_2', name: 'Group_2', color: '#22c55e' },
-        { id: 'Group_3', name: 'group_3', color: '#3b82f6' }, 
-        { id: 'group_4', name: 'Group_4', color: '#a855f7' } 
+        { id: 'Group_3', name: 'group_3', color: '#3b82f6' },
+        { id: 'group_4', name: 'Group_4', color: '#a855f7' }
     ];
 
     useEffect(() => {
-        // Fetch Scores
         const qScore = query(collection(db, "scores"), orderBy("timestamp", "desc"));
         const unsubScore = onSnapshot(qScore, (snapshot) => {
             setRecentScores(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
         });
 
-        // Fetch Groups (Real-time)
         const qGroups = collection(db, "groups");
         const unsubGroups = onSnapshot(qGroups, (snapshot) => {
             if (!snapshot.empty) {
                 const groups = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 setGroupsData(groups);
 
-                // Set default group if not set or invalid
                 setGroup(prevGroup => {
                     const isValid = groups.some(g => g.id === prevGroup);
                     return isValid ? prevGroup : '';
@@ -58,7 +54,6 @@ const Dashboard = () => {
 
             } else {
                 setGroupsData(defaultGroups);
-                // Initialize groups if empty (one-time)
                 defaultGroups.forEach(g => {
                     setDoc(doc(db, "groups", g.id), g);
                 });
@@ -84,17 +79,14 @@ const Dashboard = () => {
             };
 
             if (editingScoreId) {
-                // Update existing
                 await setDoc(doc(db, "scores", editingScoreId), scoreData, { merge: true });
                 alert("Score updated successfully!");
                 setEditingScoreId(null);
             } else {
-                // Create new
                 await addDoc(collection(db, "scores"), scoreData);
                 alert("Score added successfully!");
             }
 
-            // Reset form
             setStudentName('');
             setItemName('');
             setScore('');
@@ -113,7 +105,6 @@ const Dashboard = () => {
         setCategory(scoreItem.category);
         setEditingScoreId(scoreItem.id);
 
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -144,7 +135,6 @@ const Dashboard = () => {
         e.preventDefault();
         if (!newGroupName.trim()) return;
 
-        // Create ID from name (remove spaces, etc)
         const id = newGroupName.replace(/\s+/g, '').trim();
 
         try {
@@ -185,7 +175,6 @@ const Dashboard = () => {
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
-                {/* 1. Add Score Form */}
                 <div className="lg:col-span-2 glass-card p-6 rounded-2xl">
                     <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                         <span className="badge badge-primary badge-lg">1</span> {editingScoreId ? 'Edit Score' : 'Add Points'}
@@ -311,13 +300,11 @@ const Dashboard = () => {
                     </form>
                 </div>
 
-                {/* 2. Group Management */}
                 <div className="glass-card p-6 rounded-2xl h-fit">
                     <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <span className="badge badge-secondary badge-lg">2</span> Edit Groups
                     </h2>
                     <div className="space-y-4">
-                        {/* Add New Group Form */}
                         <div className="bg-slate-800/50 p-4 rounded-xl border border-white/10 mb-6">
                             <h3 className="font-bold text-white text-sm mb-3">Add New Group</h3>
                             <div className="flex flex-col gap-3">
@@ -358,7 +345,6 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* 3. Recent Activity */}
             <div className="glass-card p-6 rounded-2xl">
                 <h2 className="text-2xl font-bold text-white mb-4">Recent Scores</h2>
                 <div className="overflow-x-auto">
@@ -412,7 +398,6 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Debug Section */}
             <div className="p-4 bg-black/50 rounded-xl font-mono text-xs text-slate-400">
                 <h3 className="font-bold text-white mb-2">Debug Data (Groups)</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -428,18 +413,16 @@ const Dashboard = () => {
     );
 };
 
-// Sub-component for Group Row to handle local state editing
 const GroupRow = ({ group, onUpdate, onDelete }) => {
     const [name, setName] = useState(group.name);
     const [color, setColor] = useState(group.color);
     const [isExpanded, setIsExpanded] = useState(false);
     const [isDirty, setIsDirty] = useState(false);
 
-    // Sync state if props change (e.g. from DB update elsewhere)
     useEffect(() => {
         setName(group.name);
         setColor(group.color);
-        setIsDirty(false); // Reset dirty state on prop change
+        setIsDirty(false);
     }, [group.name, group.color]);
 
     const handleChange = (setter, value) => {
