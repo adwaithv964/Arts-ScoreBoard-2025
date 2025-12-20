@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase-config';
-import FireBannerComponent from '../components/FireBanner';
+import FireBannerComponent from '../Components/FireBanner';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
 
 const FIXED_GROUP_CONFIG = {
