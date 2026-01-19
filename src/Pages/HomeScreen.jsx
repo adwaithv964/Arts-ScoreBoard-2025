@@ -136,7 +136,6 @@ const HomeScreen = () => {
                     <h2 className="text-2xl font-bold text-white">Latest Updates</h2>
                     <div className="flex items-center gap-3">
                         <LiveUserBadge />
-                        <span className="badge badge-error text-white font-bold tracking-widest animate-pulse border-0 shadow-[0_0_15px_rgba(239,68,68,0.6)]">LIVE</span>
                     </div>
                 </div>
 
