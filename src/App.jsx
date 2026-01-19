@@ -21,7 +21,13 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+// ... imports
+import { useLiveUsers } from './hooks/useLiveUsers';
+
 function App() {
+  // Track presence globally while the app is open
+  useLiveUsers(true);
+
   return (
     <AuthProvider>
       <BrowserRouter>

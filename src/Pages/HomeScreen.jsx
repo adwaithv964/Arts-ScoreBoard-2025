@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../firebase-config';
 import FireBannerComponent from '../Components/FireBanner';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
+import LiveUserBadge from '../Components/LiveUserBadge';
 
 const FIXED_GROUP_CONFIG = {
-    'DHYUTHI': { color: '#0066FF', number: 1 }, 
-    'DHWANI': { color: '#FF00FF', number: 2 },   
-    'DHIVA': { color: '#FFD700', number: 3 }     
+    'DHYUTHI': { color: '#0066FF', number: 1 },
+    'DHWANI': { color: '#FF00FF', number: 2 },
+    'DHIVA': { color: '#FFD700', number: 3 }
 };
 
 const HomeScreen = () => {
@@ -133,7 +134,10 @@ const HomeScreen = () => {
             <div className="glass rounded-3xl p-1 md:p-8">
                 <div className="flex justify-between items-center mb-6 px-4">
                     <h2 className="text-2xl font-bold text-white">Latest Updates</h2>
-                    <span className="badge badge-error text-white font-bold tracking-widest animate-pulse border-0 shadow-[0_0_15px_rgba(239,68,68,0.6)]">LIVE</span>
+                    <div className="flex items-center gap-3">
+                        <LiveUserBadge />
+                        <span className="badge badge-error text-white font-bold tracking-widest animate-pulse border-0 shadow-[0_0_15px_rgba(239,68,68,0.6)]">LIVE</span>
+                    </div>
                 </div>
 
                 <div className="overflow-x-auto">
