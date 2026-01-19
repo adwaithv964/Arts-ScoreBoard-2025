@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase-config';
-import FireBannerComponent from '../Components/FireBanner';
+import FireBannerComponent from '../components/FireBanner';
 import { collection, onSnapshot, query, orderBy, where } from 'firebase/firestore';
-import LiveUserBadge from '../Components/LiveUserBadge';
+import LiveUserBadge from '../components/LiveUserBadge';
 
 const FIXED_GROUP_CONFIG = {
     'DHYUTHI': { color: '#0066FF', number: 1 },
